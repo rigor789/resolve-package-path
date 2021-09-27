@@ -5,7 +5,7 @@ type RequireResolveParams = Parameters<typeof require.resolve>;
  * @param packageName
  * @param options
  */
-function resolvePackagePath(
+export function resolvePackagePath(
   packageName: string,
   options?: RequireResolveParams[1]
 ): string | false;
@@ -15,10 +15,9 @@ function resolvePackagePath(
  * @param packageName
  * @param options
  */
-function resolvePackageJSONPath(
+export function resolvePackageJSONPath(
   packageName: string,
   options?: RequireResolveParams[1]
 ): string | false;
 
 export default resolvePackagePath;
-export { resolvePackagePath, resolvePackageJSONPath };
