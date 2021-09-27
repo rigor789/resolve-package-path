@@ -3,7 +3,7 @@ const fs = require("fs");
 
 const trailingPathSepRegExp = new RegExp(`\\${path.sep}+$`);
 
-function resolvePackagePath(packageName, options = {}) {
+function resolvePackagePath(packageName, options) {
   const packageJSONPath = resolvePackageJSONPath(packageName, options);
 
   if (!packageJSONPath) {
@@ -16,14 +16,14 @@ function resolvePackagePath(packageName, options = {}) {
     .replace(trailingPathSepRegExp, "");
 }
 
-function resolvePackageJSONPath(packageName, options = {}) {
+function resolvePackageJSONPath(packageName, options) {
   try {
-    return require.resolve(`${packageName}/package.json`);
+    return require.resolve(`${packageName}/package.json`, options);
   } catch (ignore) {}
 
   try {
     // try find last index of node_modules/<packageName>
-    const packageMainPath = require.resolve(`${packageName}`);
+    const packageMainPath = require.resolve(`${packageName}`, options);
     const searchWord = `node_modules${path.sep}${packageName.replace(
       "/",
       path.sep
