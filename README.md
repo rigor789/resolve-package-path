@@ -35,7 +35,7 @@ Resolves the package path. Options accepts anything that `require.resovle("", op
 Example:
 
 ```js
-const { resolvePackagePath } = require("resolve-package-path");
+const { resolvePackagePath } = require("@rigor789/resolve-package-path");
 
 console.log(resolvePackagePath('package-a'))         // /path/to/package-a
 console.log(resolvePackagePath('@scoped/package-a')) // /path/to/@scoped/package-a
@@ -48,7 +48,7 @@ Same as `resolvePackagePath` but returns the path to the `package.json` instead.
 Example:
 
 ```js
-const { resolvePackageJSONPath } = require("resolve-package-path");
+const { resolvePackageJSONPath } = require("@rigor789/resolve-package-path");
 
 console.log(resolvePackageJSONPath('package-a'))         // /path/to/package-a/package.json
 console.log(resolvePackageJSONPath('@scoped/package-a')) // /path/to/@scoped/package-a/package.json
