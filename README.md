@@ -28,7 +28,7 @@ This package works around the issue by:
 
 # API
 
-## resolvePackagePath(packageName, options = {})
+## resolvePackagePath(packageName: string, options?)
 
 Resolves the package path. Options accepts anything that `require.resovle("", options)` accepts. [See Node Docs](https://nodejs.org/api/modules.html#modules_require_resolve_request_options)
 
@@ -41,7 +41,7 @@ console.log(resolvePackagePath('package-a'))         // /path/to/package-a
 console.log(resolvePackagePath('@scoped/package-a')) // /path/to/@scoped/package-a
 ```
 
-## resolvePackageJSONPath(packageName, options = {})
+## resolvePackageJSONPath(packageName: string, options?)
 
 Same as `resolvePackagePath` but returns the path to the `package.json` instead.
 
