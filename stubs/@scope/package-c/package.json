@@ -1,0 +1,8 @@
+{
+  "name": "@scope/package-c",
+  "version": "1.0.0",
+  "main": "dist/index.js",
+  "exports": {
+      ".": "./dist/index.js"
+  }
+}

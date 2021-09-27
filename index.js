@@ -1,71 +1,89 @@
 const path = require("path");
 const fs = require("fs");
 
-const trailingPathSepRegExp = new RegExp(`\\${path.sep}$`);
+const trailingPathSepRegExp = new RegExp(`\\${path.sep}+$`);
 
 function resolvePackagePath(packageName, options = {}) {
-  const packageJSONPath = resolvePackageJSONPath(packageName, options)
+  const packageJSONPath = resolvePackageJSONPath(packageName, options);
 
-  if(!packageJSONPath) {
-    return false
+  if (!packageJSONPath) {
+    return false;
   }
 
+  // normalize path to remove trailing path separators
   return packageJSONPath
     .replace("package.json", "")
     .replace(trailingPathSepRegExp, "");
 }
 
 function resolvePackageJSONPath(packageName, options = {}) {
-  let packageJSONPath;
+  try {
+    return require.resolve(`${packageName}/package.json`);
+  } catch (ignore) {}
 
   try {
-    packageJSONPath = require.resolve(`${packageName}/package.json`);
-  } catch (err) {
-  }
+    // try find last index of node_modules/<packageName>
+    const packageMainPath = require.resolve(`${packageName}`);
+    const searchWord = `node_modules${path.sep}${packageName.replace(
+      "/",
+      path.sep
+    )}`;
+    const foundIndex = packageMainPath.lastIndexOf(searchWord);
 
-  // try find last index of node_modules/<packageName>
-  if (!packageJSONPath) {
-    try {
-      const packageMainPath = require.resolve(`${packageName}`);
-      const searchWord = `node_modules${path.sep}${packageName.replace(
-        "/",
-        path.sep
-      )}`;
-      const foundIndex = packageMainPath.lastIndexOf(searchWord);
+    if (foundIndex > -1) {
+      const packagePath = packageMainPath.substr(
+        0,
+        foundIndex + searchWord.length
+      );
 
-      if (foundIndex > -1) {
-        console.log('here?', foundIndex, packageMainPath)
-        const packagePath = packageMainPath.substr(
-          0,
-          foundIndex + searchWord.length
-        );
-
-        packageJSONPath = path.join(packagePath, "package.json");
-      } else {
-        // fallback to fs traversal in case of linked packages not in node_modules
-        console.log('fallback to fs traversal - SLOW.')
-        let currentDir = path.dirname(packageMainPath)
-        while (true) {
-          const _packageJSONPath = path.join(currentDir, 'package.json')
-          if(fs.existsSync(_packageJSONPath)) {
-            packageJSONPath = _packageJSONPath;
-            break;
-          }
-          const dir = path.dirname(currentDir);
-          if(dir === currentDir) {
-            // we've reached the fs root - break out of the loop
-            break;
-          }
-          // otherwise keep the loop going with the parent dir.
-          currentDir = dir;
-        }
-      }
-    } catch (err) {
-      console.log("second catch", err);
+      return path.join(packagePath, "package.json");
     }
-  }
-  
-  return packageJSONPath;
+
+    // fallback to fs traversal in case of linked packages not in node_modules
+    console.log("--- fallback to fs ---");
+    let currentDir = path.dirname(packageMainPath);
+    let possiblePackageJSONPath;
+    while (true) {
+      const packageJSONPath = path.join(currentDir, "package.json");
+
+      if (fs.existsSync(packageJSONPath)) {
+        try {
+          const packageJSONContents = JSON.parse(
+            fs.readFileSync(packageJSONPath)
+          );
+
+          if (packageJSONContents.name === packageName) {
+            // we found the package.json path for <packageName> - bail
+            return packageJSONPath;
+          }
+        } catch (ignore) {
+          // invalid json? fail or return packageJSONPath?
+        }
+
+        // we mark this as a possible path but don't return. We'll use this if no other package.json is found...
+        possiblePackageJSONPath = packageJSONPath;
+      }
+
+      const dir = path.dirname(currentDir);
+      if (dir === currentDir) {
+        // we've reached the fs root - break out of the loop
+        break;
+      }
+      // otherwise keep the loop going with the parent dir.
+      currentDir = dir;
+    }
+
+    // this is a last-resort package.json path that we found near the resolved package,
+    // but did not match the packageName or was in an invalid json file
+    if (possiblePackageJSONPath) {
+      return possiblePackageJSONPath;
+    }
+  } catch (ignore) {}
+
+  // package has not been found
+  return false;
 }
 
 module.exports = resolvePackagePath;
+module.exports.resolvePackagePath = resolvePackagePath;
+module.exports.resolvePackageJSONPath = resolvePackageJSONPath;
