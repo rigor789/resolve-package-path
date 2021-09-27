@@ -7,11 +7,12 @@ on:
     branches: [main]
 
 jobs:
-  build:
-    runs-on: ubuntu-latest
+  test:
+    runs-on: ${{ matrix.os }}
 
     strategy:
       matrix:
+        os: [ubuntu-latest, windows-latest] # macos-latest is assumed to behave the same as ubuntu-latest
         node-version: [12.x, 14.x, 16.x]
         package-manager: [npm, yarn, pnpm]
 
