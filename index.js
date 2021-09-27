@@ -23,7 +23,7 @@ function resolvePackageJSONPath(packageName, options) {
 
   try {
     // try find last index of node_modules/<packageName>
-    const packageMainPath = require.resolve(`${packageName}`, options);
+    const packageMainPath = require.resolve(packageName, options);
     const searchWord = `node_modules${path.sep}${packageName.replace(
       "/",
       path.sep
