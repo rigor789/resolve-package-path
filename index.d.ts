@@ -8,7 +8,7 @@ type RequireResolveParams = Parameters<typeof require.resolve>;
 export function resolvePackagePath(
   packageName: string,
   options?: RequireResolveParams[1]
-): string | false;
+): string | undefined;
 
 /**
  * Resolve the path of the package.json belonging to "packageName"
@@ -18,6 +18,6 @@ export function resolvePackagePath(
 export function resolvePackageJSONPath(
   packageName: string,
   options?: RequireResolveParams[1]
-): string | false;
+): string | undefined;
 
 export default resolvePackagePath;

@@ -7,7 +7,7 @@ function resolvePackagePath(packageName, options = {}) {
   const packageJSONPath = resolvePackageJSONPath(packageName, options);
 
   if (!packageJSONPath) {
-    return false;
+    return undefined;
   }
 
   // normalize path to remove trailing path separators
@@ -80,7 +80,7 @@ function resolvePackageJSONPath(packageName, options = {}) {
   } catch (ignore) {}
 
   // package has not been found
-  return false;
+  return undefined;
 }
 
 module.exports = resolvePackagePath;
