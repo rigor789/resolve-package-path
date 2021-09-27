@@ -1,5 +1,5 @@
 {
-  "name": "resolve-package-path",
+  "name": "@rigor789/resolve-package-path",
   "version": "1.0.0",
   "main": "index.js",
   "repository": "https://github.com/rigor789/resolve-package-path.git",

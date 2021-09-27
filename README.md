@@ -1,4 +1,12 @@
-# resolve-package-path
+# @rigor789/resolve-package-path
+
+```bash
+npm i --save @rigor789/resolve-package-path
+# or 
+yarn add @rigor789/resolve-package-path
+# or
+pnpm add @rigor789/resolve-package-path
+```
 
 Small utility (no external dependencies) for finding the path of a package across different node versions.
 
