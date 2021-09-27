@@ -40,7 +40,7 @@ const tests = [
   },
   {
     packageName: "nonexistent",
-    expectedPath: false,
+    expectedPath: undefined,
   },
 ];
 
