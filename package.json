@@ -6,10 +6,9 @@
   "author": "Igor Randjelovic <rigor789@gmail.com>",
   "license": "MIT",
   "scripts": {
-    "test": "jest"
+    "test": "node test.js"
   },
   "devDependencies": {
-    "jest": "^27.2.2",
     "package-a": "./stubs/package-a",
     "package-b": "./stubs/package-b",
     "@scope/package-a": "./stubs/@scope/package-a",
