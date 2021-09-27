@@ -1,5 +1,11 @@
 # @rigor789/resolve-package-path
 
+[![CI](https://github.com/rigor789/resolve-package-path/actions/workflows/ci.yml/badge.svg)](https://github.com/rigor789/resolve-package-path/actions/workflows/ci.yml)
+
+Small utility (no external dependencies) for finding the path of a package across different node versions.
+
+---
+
 ```bash
 npm i --save @rigor789/resolve-package-path
 # or 
@@ -8,7 +14,7 @@ yarn add @rigor789/resolve-package-path
 pnpm add @rigor789/resolve-package-path
 ```
 
-Small utility (no external dependencies) for finding the path of a package across different node versions.
+---
 
 The reason this exists is because `require.resolve("<packageName>/package.json")` can fail if a package defines `exports` in their `package.json` and does not include `package.json`.
 
