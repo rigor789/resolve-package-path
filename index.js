@@ -40,7 +40,6 @@ function resolvePackageJSONPath(packageName, options = {}) {
     }
 
     // fallback to fs traversal in case of linked packages not in node_modules
-    console.log("--- fallback to fs ---");
     let currentDir = path.dirname(packageMainPath);
     let possiblePackageJSONPath;
     while (true) {
