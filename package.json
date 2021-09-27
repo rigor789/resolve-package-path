@@ -1,7 +1,11 @@
 {
   "name": "@rigor789/resolve-package-path",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "main": "index.js",
+  "types": "index.d.ts",
+  "files": [
+    "index.d.ts"
+  ],
   "repository": "https://github.com/rigor789/resolve-package-path.git",
   "author": "Igor Randjelovic <rigor789@gmail.com>",
   "license": "MIT",
