@@ -26,7 +26,8 @@ const tests = [
   {
     packageName: "package-alias",
     expectedPath: true,
-    skip: nodeMajorVersion < 14,
+    // skip this test on node < 16 because it doesn't support "npm:<packagename>" aliases in package.json
+    skip: nodeMajorVersion < 16,
   },
   {
     packageName: "package-b",
@@ -59,8 +60,9 @@ const tests = [
 ];
 
 tests.map((test) => {
+  console.log(">>", test.packageName, ":\n");
   if (test.skip) {
-    console.log("SKIPPED", test.packageName);
+    console.log("SKIPPED");
     console.log("\n");
     return;
   }
@@ -78,7 +80,7 @@ tests.map((test) => {
   } else {
     console.error("FAIL");
     if (test.expectedPath === true) {
-      console.error(`\nExpected \n\t"${packagePath}" \nto be truthy.`);
+      console.error(`\nExpected \n\t"${packagePath}" to be truthy.`);
     } else {
       console.error(
         `\nExpected \n\t"${packagePath}" \nto equal \n\t"${test.expectedPath}"`
