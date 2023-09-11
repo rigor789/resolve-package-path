@@ -22,7 +22,13 @@ function tryFindPackagePath(packageName, options) {
     return require.resolve(packageName, options);
   } catch (ignore) {}
 
-  const paths = options?.paths ?? [process.cwd()];
+  let paths;
+  if (options && options.paths) {
+    paths = options.paths;
+  } else {
+    paths = [process.cwd()];
+  }
+
   for (const dir of paths) {
     try {
       const pathToCheck = path.resolve(dir, "node_modules", packageName);
@@ -100,7 +106,7 @@ function resolvePackageJSONPath(packageName, options) {
     // this is a last-resort package.json path that we found near the resolved package,
     // but did not match the packageName or was in an invalid json file
     if (possiblePackageJSONPath) {
-      console.log("using possible package.json path", possiblePackageJSONPath)
+      console.log("using possible package.json path", possiblePackageJSONPath);
       return possiblePackageJSONPath;
     }
   } catch (ignore) {}
