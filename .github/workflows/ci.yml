@@ -20,15 +20,15 @@ jobs:
       PACKAGE_MANAGER: ${{ matrix.package-manager }}
 
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
 
-      - uses: pnpm/action-setup@v2.0.1
+      - uses: pnpm/action-setup@v2
         if: matrix.package-manager == 'pnpm'
         with:
-          version: 6.15.2
+          version: "latest"
 
       - name: Use Node.js ${{ matrix.node-version }}
-        uses: actions/setup-node@v2
+        uses: actions/setup-node@v3
         with:
           node-version: ${{ matrix.node-version }}
 
