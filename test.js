@@ -2,7 +2,10 @@ const { resolvePackagePath } = require("./");
 
 const path = require("path");
 
-const expectedPath = (packageName) => {
+const expectedPath = (packageName, dir) => {
+  if (dir) {
+    return path.resolve(__dirname, dir, packageName);
+  }
   switch (process.env.PACKAGE_MANAGER) {
     case "yarn":
       return path.resolve(__dirname, "node_modules", packageName);
@@ -19,12 +22,20 @@ const tests = [
     expectedPath: expectedPath("package-a"),
   },
   {
+    packageName: "package-alias",
+    expectedPath: expectedPath("package-alias", "node_modules"),
+  },
+  {
     packageName: "package-b",
     expectedPath: expectedPath("package-b"),
   },
   {
     packageName: "package-c",
     expectedPath: expectedPath("package-c"),
+  },
+  {
+    packageName: "package-no-main-exports",
+    expectedPath: expectedPath("package-no-main-exports", "node_modules"),
   },
   {
     packageName: "@scope/package-a",
@@ -54,11 +65,13 @@ tests.map((test) => {
     console.log("OK");
   } else {
     console.error("FAIL");
-    console.error(`\nExpected \n\t"${packagePath}" \nto equal \n\t"${test.expectedPath}"`);
+    console.error(
+      `\nExpected \n\t"${packagePath}" \nto equal \n\t"${test.expectedPath}"`
+    );
 
     // set process to a failed exit code
     process.exitCode = 1;
   }
 
-  console.log('\n')
+  console.log("\n");
 });

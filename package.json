@@ -1,6 +1,6 @@
 {
   "name": "@rigor789/resolve-package-path",
-  "version": "1.0.5",
+  "version": "1.0.6",
   "main": "index.js",
   "types": "index.d.ts",
   "files": [
@@ -14,8 +14,10 @@
   },
   "devDependencies": {
     "package-a": "./stubs/package-a",
+    "package-alias": "npm:@rigor789/resolve-package-path@latest",
     "package-b": "./stubs/package-b",
     "package-c": "./stubs/package-c",
+    "package-no-main-exports": "./stubs/package-no-main-exports",
     "@scope/package-a": "./stubs/@scope/package-a",
     "@scope/package-b": "./stubs/@scope/package-b",
     "@scope/package-c": "./stubs/@scope/package-c"

@@ -16,6 +16,25 @@ function resolvePackagePath(packageName, options) {
     .replace(trailingPathSepRegExp, "");
 }
 
+function tryFindPackagePath(packageName, options) {
+  try {
+    // this can throw if the package doesn't have an exported main field
+    return require.resolve(packageName, options);
+  } catch (ignore) {}
+
+  const paths = options?.paths ?? [process.cwd()];
+  for (const dir of paths) {
+    try {
+      const pathToCheck = path.resolve(dir, "node_modules", packageName);
+      if (fs.existsSync(pathToCheck)) {
+        return pathToCheck;
+      }
+    } catch (ignore) {
+      // ignore
+    }
+  }
+}
+
 function resolvePackageJSONPath(packageName, options) {
   try {
     return require.resolve(`${packageName}/package.json`, options);
@@ -23,7 +42,13 @@ function resolvePackageJSONPath(packageName, options) {
 
   try {
     // try find last index of node_modules/<packageName>
-    const packageMainPath = require.resolve(packageName, options);
+    const packageMainPath = tryFindPackagePath(packageName, options);
+
+    if (!packageMainPath) {
+      // we couldn't find the main path, so we likely won't find the package.json either.
+      return undefined;
+    }
+
     const searchWord = `node_modules${path.sep}${packageName.replace(
       "/",
       path.sep
@@ -31,7 +56,7 @@ function resolvePackageJSONPath(packageName, options) {
     const foundIndex = packageMainPath.lastIndexOf(searchWord);
 
     if (foundIndex > -1) {
-      const packagePath = packageMainPath.substr(
+      const packagePath = packageMainPath.slice(
         0,
         foundIndex + searchWord.length
       );
@@ -75,6 +100,7 @@ function resolvePackageJSONPath(packageName, options) {
     // this is a last-resort package.json path that we found near the resolved package,
     // but did not match the packageName or was in an invalid json file
     if (possiblePackageJSONPath) {
+      console.log("using possible package.json path", possiblePackageJSONPath)
       return possiblePackageJSONPath;
     }
   } catch (ignore) {}

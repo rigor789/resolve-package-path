@@ -1,0 +1,6 @@
+{
+  "name": "package-no-main-exports",
+  "version": "1.0.0",
+  "type": "module",
+  "exports": {}
+}
