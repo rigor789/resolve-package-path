@@ -2,6 +2,8 @@ const { resolvePackagePath } = require("./");
 
 const path = require("path");
 
+const nodeMajorVersion = +process.versions.node.split(".")[0];
+
 const expectedPath = (packageName, dir) => {
   if (dir) {
     return path.resolve(__dirname, dir, packageName);
@@ -24,6 +26,7 @@ const tests = [
   {
     packageName: "package-alias",
     expectedPath: true,
+    skip: nodeMajorVersion < 14,
   },
   {
     packageName: "package-b",
@@ -56,6 +59,12 @@ const tests = [
 ];
 
 tests.map((test) => {
+  if (test.skip) {
+    console.log("SKIPPED", test.packageName);
+    console.log("\n");
+    return;
+  }
+
   const packagePath = resolvePackagePath(test.packageName);
   console.log(
     test.packageName + " has been resolved to:\n\t" + packagePath + "\n"
@@ -68,9 +77,13 @@ tests.map((test) => {
     console.log("OK");
   } else {
     console.error("FAIL");
-    console.error(
-      `\nExpected \n\t"${packagePath}" \nto equal \n\t"${test.expectedPath}"`
-    );
+    if (test.expectedPath === true) {
+      console.error(`\nExpected \n\t"${packagePath}" \nto be truthy.`);
+    } else {
+      console.error(
+        `\nExpected \n\t"${packagePath}" \nto equal \n\t"${test.expectedPath}"`
+      );
+    }
 
     // set process to a failed exit code
     process.exitCode = 1;
